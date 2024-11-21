@@ -19,7 +19,7 @@ public class MecanicoUseCase {
     }
 
     public Optional<Mecanico> findById(int id){
-        return repository.findById(id)
+        return repository.findById(id);
     }
 
     public List<Mecanico> findAll(){
