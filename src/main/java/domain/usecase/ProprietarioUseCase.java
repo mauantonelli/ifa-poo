@@ -16,7 +16,7 @@ public class ProprietarioUseCase {
 
     public void save(Proprietario proprietario){
         repository.save(proprietario);
-    }
+    } // Passar referencia do repositório
 
     public Optional<Proprietario> findById(int id){
         return repository.findById(id);

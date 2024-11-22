@@ -8,6 +8,8 @@ public class Proprietario extends Pessoa {
         this.telefone = telefone;
     }
 
+    // Por o ID no banco ter AI, fiquei com a duvida de passar ele pelo construtor ou não!
+
     public String getTelefone() {
         return telefone;
     }
