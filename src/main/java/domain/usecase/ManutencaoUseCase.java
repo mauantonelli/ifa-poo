@@ -4,6 +4,9 @@ import domain.entity.Manutencao;
 import domain.repository.ManutencaoRepository;
 
 public class ManutencaoUseCase {
+
+    // Associacao entre ManutencaoUseCase -> MenutencaoRep/Rep
+
     private final ManutencaoRepository repository;
 
     public ManutencaoUseCase(ManutencaoRepository repository) {
