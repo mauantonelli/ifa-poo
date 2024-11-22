@@ -18,7 +18,7 @@ public class ManutencaoRepositoryImpl implements ManutencaoRepository {
 
     @Override
     public List<Manutencao> obterManutencaoPorVeiculo(Veiculo veiculo) {
-        return null;
+        return dao.obterManutencaoPorVeiculo(veiculo);
     }
 
     @Override
@@ -30,11 +30,11 @@ public class ManutencaoRepositoryImpl implements ManutencaoRepository {
 
     @Override
     public Optional<Manutencao> findById(int id) {
-        return Optional.empty();
+        return dao.findById(id);
     }
 
     @Override
     public List<Manutencao> findAll() {
-        return null;
+        return dao.findAll();
     }
 }

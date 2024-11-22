@@ -1,4 +1,6 @@
 package adapters.dao;
 
-public interface MecanicoDAO {
+import domain.entity.Mecanico;
+
+public interface MecanicoDAO extends DAO<Mecanico> {
 }
