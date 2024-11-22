@@ -2,8 +2,10 @@ package domain.usecase;
 
 import domain.entity.Mecanico;
 import domain.entity.Proprietario;
+import domain.entity.Veiculo;
 import domain.repository.ProprietarioRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public class ProprietarioUseCase {
@@ -21,4 +23,10 @@ public class ProprietarioUseCase {
     public Optional<Proprietario> findById(int id){
         return repository.findById(id);
     }
+
+
+    public List<Proprietario> findAll(){
+        return repository.findAll();
 }
+}
+
