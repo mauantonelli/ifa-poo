@@ -1,11 +1,13 @@
 package adapters.dao;
 
 import adapters.ConnectionFactory;
+import domain.entity.Mecanico;
 import domain.entity.Proprietario;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -54,7 +56,21 @@ public class ProprietarioDAOimpl implements ProprietarioDAO{
     }
 
     @Override
-    public List findAll() {
-        return null;
+    public List<Proprietario> findAll() {
+        String sql = "SELECT * FROM proprietario";
+        List<Proprietario> proprietarioList = new ArrayList<>();
+
+        try (PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Proprietario proprietario = new Proprietario(rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("Telefone"));
+                proprietarioList.add(proprietario);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return proprietarioList;
     }
 }
