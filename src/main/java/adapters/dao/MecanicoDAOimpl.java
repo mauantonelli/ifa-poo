@@ -8,6 +8,7 @@ import domain.entity.Veiculo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,6 +59,19 @@ public class MecanicoDAOimpl implements MecanicoDAO {
 
     @Override
     public List<Mecanico> findAll() {
-        return null;
+        String sql = "SELECT * FROM mecanico";
+        List<Mecanico> mecanicoList = new ArrayList<>();
+        try (PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Mecanico mecanico = new Mecanico(rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getDouble("salario"));
+                mecanicoList.add(mecanico);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return mecanicoList;
     }
 }
