@@ -1,7 +1,9 @@
 package adapters.dao;
 
 import adapters.ConnectionFactory;
+import domain.entity.Manutencao;
 import domain.entity.Mecanico;
+import domain.entity.Veiculo;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,7 +35,25 @@ public class MecanicoDAOimpl implements MecanicoDAO {
 
     @Override
     public Optional<Mecanico> findById(int id) {
+        String sql = "SELECT * FROM mecanico WHERE id=?";
+        try (PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                Mecanico mecanico = new Mecanico(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getDouble("salario")
+                );
+
+                return Optional.of(mecanico);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return Optional.empty();
+
     }
 
     @Override
