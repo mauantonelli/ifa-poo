@@ -1,6 +1,8 @@
 package adapters.dao;
 
-public interface ProprietarioDAO extends DAO {
+import domain.entity.Proprietario;
+
+public interface ProprietarioDAO extends DAO<Proprietario> {
 
 
 }

@@ -1,15 +1,34 @@
 package adapters.dao;
 
+import adapters.ConnectionFactory;
 import domain.entity.Mecanico;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class MecanicoDAOimpl implements MecanicoDAO {
 
     @Override
-    public int save(Mecanico type) {
-        return 0;
+    public int save(Mecanico mecanico) {
+        String sql = "INSERT INTO mecanico (id, nome, salario) values (?,?,?)";
+        int generatedId = 0;
+        try (PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
+            stmt.setInt(1, mecanico.getId());
+            stmt.setString(2, mecanico.getNome());
+            stmt.setDouble(2, mecanico.getSalario());
+            stmt.executeUpdate();
+
+            ResultSet generatedKeys = stmt.getGeneratedKeys();
+            if (generatedKeys.next())
+                generatedId = generatedKeys.getInt(1);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return generatedId;
     }
 
     @Override
