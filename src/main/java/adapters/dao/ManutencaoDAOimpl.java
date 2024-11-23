@@ -3,6 +3,7 @@ package adapters.dao;
 import adapters.ConnectionFactory;
 import domain.entity.Manutencao;
 import domain.entity.Mecanico;
+import domain.entity.Proprietario;
 import domain.entity.Veiculo;
 
 import java.sql.PreparedStatement;
@@ -36,7 +37,34 @@ public class ManutencaoDAOimpl implements ManutencaoDAO {
 
     @Override
     public Optional<Manutencao> findById(int id) {
+        String sql = "SELECT * FROM manutencao WHERE id=?";
+        try (PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                // aqui recupera-se o veículo
+                Veiculo veiculo = new VeiculoDAOimpl().findById(rs.getInt("veiculo")).orElse(null);
+
+                // agr o mecânico:
+                Mecanico mecanico = new MecanicoDAOimpl().findById(rs.getInt("mecanico")).orElse(null);
+
+                // criando um obj manutenção:
+                Manutencao manutencao = new Manutencao(
+                        rs.getInt("id"),
+                        rs.getString("data"),
+                        rs.getDouble("custo"),
+                        veiculo,                             // obj veic relacionado
+                        mecanico                             // obj mec relacionado
+                );
+
+                return Optional.of(manutencao);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return Optional.empty();
+
     }
 
     @Override
