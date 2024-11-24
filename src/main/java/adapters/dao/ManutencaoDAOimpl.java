@@ -9,6 +9,7 @@ import domain.entity.Veiculo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -69,9 +70,34 @@ public class ManutencaoDAOimpl implements ManutencaoDAO {
 
     @Override
     public List<Manutencao> findAll() {
-        return null;
-    }
+        String sql = "SELECT * FROM manutencao";
+        List<Manutencao> manutencaoList = new ArrayList<>();
 
+        try (PreparedStatement stmt = ConnectionFactory.createStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+
+                Veiculo veiculo = new VeiculoDAOimpl().findById(rs.getInt("veiculo")).orElse(null);
+
+                // agr o mecânico:
+                Mecanico mecanico = new MecanicoDAOimpl().findById(rs.getInt("mecanico")).orElse(null);
+
+
+                Manutencao manutencao = new Manutencao(
+                        rs.getInt("id"),
+                        rs.getString("data"),
+                        rs.getDouble("custo"),
+                        veiculo,
+                        mecanico
+                );
+
+                manutencaoList.add(manutencao);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return manutencaoList;
+    }
     @Override
     public List<Manutencao> obterManutencaoPorVeiculo(Veiculo veiculo) {
         return null;
