@@ -8,6 +8,7 @@ import domain.entity.Veiculo;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,7 +41,33 @@ public class VeiculoDAOimpl implements VeiculoDAO{
 
     @Override
     public List<Veiculo> findAll() {
-        return null;
+        String sql = "SELECT * FROM veiculo";  // SQL para buscar todos os veículos
+        List<Veiculo> veiculoList = new ArrayList<>();
+
+        try (PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            ResultSet rs = stmt.executeQuery();  // Executa a query no banco de dados
+
+            while (rs.next()) {
+                // Busca o proprietário associado ao veículo
+                Proprietario proprietario1 = (Proprietario) new ProprietarioDAOimpl() // prob?
+                        .findById(rs.getInt("proprietario"))
+                        .orElse(null);  // Se não encontrar, retorna null
+
+                // Cria o objeto Veiculo
+                Veiculo veiculo = new Veiculo(
+                        rs.getInt("id"),
+                        rs.getString("placa"),
+                        rs.getString("marca"),
+                        proprietario1 // Passa o proprietário para o veículo
+                );
+
+                veiculoList.add(veiculo);  // Adiciona o veículo à lista
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();  // Imprime o erro se ocorrer alguma exceção
+        }
+
+        return veiculoList;  // Retorna a lista de veículos
     }
 
     @Override
