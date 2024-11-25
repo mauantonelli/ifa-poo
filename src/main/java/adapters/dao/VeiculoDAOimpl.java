@@ -96,6 +96,32 @@ public class VeiculoDAOimpl implements VeiculoDAO{
 
     @Override
     public List<Veiculo> obterVeiculoPorPlaca(String placa) {
-        return null;
-    }
+        String sql = "SELECT * FROM veiculo WHERE placa = ?"; // Filtro pela placa
+        List<Veiculo> veiculos = new ArrayList<>();
+
+        try (PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, placa); // Define a placa no parâmetro da query
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                int proprietarioId = rs.getInt("proprietario"); // ID do proprietário na tabela
+                // Busca o proprietário associado usando o DAO
+                Proprietario proprietario = (Proprietario) new ProprietarioDAOimpl()
+                        .findById(proprietarioId)
+                        .orElse(null); // Caso não encontre, retorna null
+
+                // Criação do objeto Veiculo
+                Veiculo veiculo = new Veiculo(
+                        rs.getInt("id"),
+                        rs.getString("placa"),
+                        rs.getString("marca"),
+                        proprietario // Passa o proprietário encontrado
+                );
+                veiculos.add(veiculo); // Adiciona à lista
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return veiculos;
+}
 }
