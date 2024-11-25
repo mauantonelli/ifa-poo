@@ -11,7 +11,7 @@ public abstract class ConnectionFactory {
 
     public  static Connection getConnection() throws SQLException {
         if (conn == null)
-            conn = DriverManager.getConnection("jdbc:sqlite:simuladoP2.db");
+            conn = DriverManager.getConnection("jdbc:sqlite:prova2.db");
         return conn;
     }
 
