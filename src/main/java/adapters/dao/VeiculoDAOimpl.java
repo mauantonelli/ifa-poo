@@ -72,7 +72,26 @@ public class VeiculoDAOimpl implements VeiculoDAO{
 
     @Override
     public List<Veiculo> obterVeiculoPorProprietario(Proprietario proprietario) {
-        return null;
+        String sql = "SELECT * FROM veiculo WHERE proprietario = ?";
+        List<Veiculo> veiculos = new ArrayList<>();
+
+        try (PreparedStatement stmt = ConnectionFactory.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, proprietario.getId());
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Veiculo veiculo = new Veiculo(
+                        rs.getInt("id"),
+                        rs.getString("placa"),
+                        rs.getString("marca"),
+                        proprietario // proprietario foi passado como arg
+                );
+                veiculos.add(veiculo);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return veiculos;
     }
 
     @Override
